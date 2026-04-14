@@ -1,0 +1,21 @@
+{
+  "name": "Modelorama Premium",
+  "short_name": "Modelorama",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#092440",
+  "theme_color": "#ffc92c",
+  "description": "Cerveza fría y licores premium a domicilio.",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/931/931949.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/931/931949.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

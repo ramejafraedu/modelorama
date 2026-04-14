@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modelorama Coalcomán | Cerveza Fría a Domicilio</title>
+    <meta name="description"
+        content="Modelorama Coalcomán - Tu sucursal de confianza. Cerveza fría, licores y paquetes a domicilio. Corona, Modelo, Victoria y más.">
+
+    <!-- Custom Fonts (Now added in CSS too, but preloading here is good) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Leaflet CSS for Maps -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+    <!-- SweetAlert2 Theme Dark -->
+    <link href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@4/dark.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="css/styles.css?v=2.0" rel="stylesheet">
+
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#053674">
+</head>
+
+<body>
+
+    <!-- ===== TOP ANNOUNCEMENT BAR ===== -->
+    <div class="top-announcement-bar d-none d-md-block">
+        <div class="container">
+            <i class="bi bi-clock-fill me-2"></i> Lunes a Domingo &nbsp;|&nbsp; <span>10:00 AM – 10:00 PM</span>
+            &nbsp;&nbsp;·&nbsp;&nbsp;
+            <i class="bi bi-geo-alt-fill me-2"></i> Coalcomán, Michoacán &nbsp;&nbsp;·&nbsp;&nbsp;
+            <i class="bi bi-telephone-fill me-1"></i> <a href="https://wa.me/5214531464786">WhatsApp 453-146-4786</a>
+        </div>
+    </div>
+
+    <!-- ===== AGE VERIFICATION MODAL ===== -->
+    <div class="age-modal fixed-top w-100 h-100 d-flex align-items-center justify-content-center" id="ageModal"
+        style="z-index: 10000;">
+        <div class="age-modal-content mx-3">
+            <h2 class="mb-4">¿Eres mayor de edad?</h2>
+            <p class="mb-4 text-muted">Para acceder a este sitio debes tener más de 18 años.</p>
+            <div class="d-flex justify-content-center gap-3">
+                <button class="btn btn-premium-primary" onclick="window.confirmAge(true)">
+                    Sí, soy mayor
+                </button>
+                <button class="btn btn-premium-outline" onclick="window.confirmAge(false)">
+                    No entrar
+                </button>
+            </div>
+            <p class="age-warning mt-4 mb-0">
+                <i class="bi bi-exclamation-triangle"></i>
+                Prohibida la venta de alcohol a menores
+            </p>
+        </div>
+    </div>
+
+    <!-- ===== NAVBAR ===== -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center gap-2" href="#inicio"
+                style="padding:0; transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);">
+                <img src="modelorama-vector-logo-seeklogo/modelorama-seeklogo.png" alt="Modelorama Logo"
+                    style="height: 40px; width: auto;">
+                <div style="line-height: 1.1;">
+                    <span
+                        style="font-family: 'Outfit', sans-serif; font-weight: 400; font-size: 0.65rem; color: #6B7280; letter-spacing: 2px; text-transform: uppercase;">Coalcom&aacute;n</span>
+                </div>
+            </a>
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <i class="bi bi-list fs-1" style="color: #0047AB;"></i>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-center">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#inicio">Inicio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#promociones">Promociones</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarCategorias" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Catálogo
+                        </a>
+                        <ul class="dropdown-menu border-0 shadow-sm" aria-labelledby="navbarCategorias"
+                            id="navCategoryDropdown">
+                            <li><a class="dropdown-item fw-bold" href="#productos" onclick="renderProducts('all')">Ver
+                                    Todo</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item ms-lg-3">
+                        <button class="btn btn-outline-primary position-relative me-2" onclick="window.openCartModal()"
+                            style="border-radius: 50%; width: 42px; height: 42px; border-color: #0047AB; color: #0047AB;">
+                            <i class="bi bi-cart3"></i>
+                            <span id="cartCount"
+                                class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                                style="display: none; font-size: 0.6rem;">
+                                0
+                            </span>
+                        </button>
+                    </li>
+                    <li class="nav-item ms-lg-2">
+                        <a id="navMapLink" href="#" target="_blank"
+                            class="btn btn-outline-danger position-relative me-2"
+                            style="border-radius: 50%; width: 42px; height: 42px; display: none; align-items: center; justify-content: center;"
+                            title="Ver en mapa">
+                            <i class="bi bi-geo-alt-fill"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="btn btn-premium-primary px-4 py-2" href="https://wa.me/5214531464786" target="_blank"
+                            style="font-size: 0.8rem;">
+                            <i class="bi bi-whatsapp me-2"></i> Pedir
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ===== HERO CAROUSEL ===== -->
+    <section class="hero-carousel-section p-0" id="inicio">
+        <div id="mainHeroCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="5000">
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#mainHeroCarousel" data-bs-slide-to="0" class="active"></button>
+                <button type="button" data-bs-target="#mainHeroCarousel" data-bs-slide-to="1"></button>
+            </div>
+            <div class="carousel-inner">
+                <!-- Slide 1: Cerveza -->
+                <div class="carousel-item active hero-slide dark-bg">
+                    <div class="orb orb-1"></div>
+                    <div class="container hero-content h-100 d-flex align-items-center">
+                        <div class="row w-100 align-items-center">
+                            <div class="col-lg-7 fade-in visible me-lg-4">
+                                <div class="hero-eyebrow-badge mb-3">
+                                    <span class="dot"></span> Sucursal Oficial Modelorama
+                                </div>
+                                <h1 class="hero-title">
+                                    CERVEZA FRÍA
+                                    <span class="text-primary position-relative">EN COALCOMÁN</span>
+                                </h1>
+                                <p class="hero-text">
+                                    Tu Modelorama de confianza. Toda la selección de Grupo Modelo y más, fría y lista
+                                    para entregar.
+                                </p>
+                                <button class="btn btn-premium-primary rounded-pill me-3 px-4 py-2"
+                                    onclick="document.getElementById('productos').scrollIntoView({behavior: 'smooth', block: 'start'});">
+                                    Ver Catálogo <i class="bi bi-arrow-right ms-2"></i>
+                                </button>
+                            </div>
+                            <!-- Image on the right side for the Home Screen -->
+                            <div
+                                class="col-lg-4 d-flex align-items-center justify-content-center fade-in delay-200 visible mt-4 mt-lg-0">
+                                <img src="https://images.unsplash.com/photo-1618885472179-5e474019f2a9?w=400&h=400&fit=crop"
+                                    alt="Cerveza" class="img-fluid drop-shadow"
+                                    style="max-height: 300px; transform: rotate(5deg); border-radius: 20px;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Slide 2: Fiesta -->
+                <div class="carousel-item hero-slide gold-bg">
+                    <div class="container hero-content h-100 d-flex align-items-center">
+                        <div class="row w-100">
+                            <div class="col-lg-8 fade-in visible">
+                                <span class="badge bg-dark text-white mb-3 px-3 py-2 fw-bold">NUEVO</span>
+                                <h1 class="hero-title" style="color: #092440;">
+                                    ARMAMOS TU
+                                    <span class="text-white">FIESTA TOTAL</span>
+                                </h1>
+                                <p class="hero-text" style="color: #092440;">
+                                    Paquetes con botanas, hielo y mezcladores listos para enviar. ¡No te quedes sin
+                                    nada!
+                                </p>
+                                <a href="#promociones" class="btn btn-premium-primary btn-lg fw-bold px-4 py-2">
+                                    <i class="bi bi-stars me-2"></i> Ver Paquetes
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#mainHeroCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Anterior</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#mainHeroCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Siguiente</span>
+            </button>
+        </div>
+    </section>
+
+    <!-- ===== FEATURES ===== -->
+    <section class="info-section">
+        <div class="container">
+            <h2 class="section-title">Nuestra <span>Garantía</span></h2>
+            <p class="section-subtitle mb-4">Lo que nos hace diferentes</p>
+            <div class="row g-4">
+                <div class="col-6 col-md-4 fade-in delay-100">
+                    <div class="info-card">
+                        <i class="bi bi-snow3 info-icon"></i>
+                        <h4>Garantía de Frío</h4>
+                        <p>Simpre a la temperatura ideal para su consumo inmediato.</p>
+                    </div>
+                </div>
+                <div class="col-6 col-md-4 fade-in delay-200">
+                    <div class="info-card">
+                        <i class="bi bi-wallet2 info-icon"></i>
+                        <h4>Precios Oficiales</h4>
+                        <p>Sin intermediarios. Los mejores precios directos de marca.</p>
+                    </div>
+                </div>
+                <div class="col-6 col-md-4 fade-in delay-300">
+                    <div class="info-card">
+                        <i class="bi bi-clock-history info-icon"></i>
+                        <h4>Servicio Extendido</h4>
+                        <p>Abierto todos los días de 10:00 AM a 10:00 PM.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== PROMOTIONS ===== -->
+    <section class="promo-section yellow-bg" id="promociones">
+        <div class="container">
+            <h2 class="section-title text-dark">Promociones <span>Destacadas</span></h2>
+            <p class="section-subtitle text-dark opacity-75">Oportunidades únicas por tiempo limitado</p>
+
+            <div class="row g-4 justify-content-center" id="promoContainer">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== COMBOS Y PAQUETES ===== -->
+    <section class="combos-section" id="combos" style="display: none;">
+        <div class="container">
+            <h2 class="section-title">Combos y <span>Paquetes</span></h2>
+            <p class="section-subtitle mb-4">Arma tu fiesta a mejor precio</p>
+            <div class="row g-4 justify-content-center" id="combosGrid">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== CATALOGO ===== -->
+    <section class="products-section" id="productos">
+        <div class="container">
+
+            <h2 class="section-title">Nuestro <span>Catálogo</span></h2>
+            <p class="section-subtitle mb-4">Encuentra tu favorita</p>
+
+            <!-- Stories / Icon Menu -->
+            <div class="stories-wrapper sticky-top py-2 mb-4"
+                style="z-index: 1020; top: 70px; background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+                <div class="stories-container">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+
+            <!-- Search Bar with Category Dropdown -->
+            <div class="row justify-content-center mb-5">
+                <div class="col-md-10 col-lg-8">
+                    <div class="search-bar-wrapper d-flex">
+                        <!-- Category Dropdown -->
+                        <div class="category-dropdown-container position-relative">
+                            <div class="category-dropdown-toggle" id="categoryDropdownToggle">
+                                <i class="bi bi-filter-left category-dropdown-icon"></i>
+                                <input type="text" id="categoryDropdownInput" class="category-dropdown-input"
+                                    placeholder="Todas" autocomplete="off" data-selected-category="all">
+                                <i class="bi bi-chevron-down category-dropdown-chevron"></i>
+                            </div>
+                            <ul id="categoryDropdownList" class="category-dropdown-list list-group shadow-lg border-0"
+                                style="display: none;">
+                            </ul>
+                        </div>
+                        <!-- Search Input -->
+                        <div class="search-container position-relative flex-grow-1">
+                            <i class="bi bi-search search-icon"></i>
+                            <input type="text" id="productSearch" class="form-control search-input"
+                                placeholder="¿Qué se te antoja hoy? (Ej: Modelo, Papas, Tequila...)" autocomplete="off">
+                            <!-- Autocomplete Dropdown -->
+                            <ul id="searchDropdown" class="list-group position-absolute w-100 shadow-lg border-0"
+                                style="display: none; z-index: 1050; top: 100%; left:0; max-height: 250px; overflow-y: auto; border-radius: 0 0 15px 15px;">
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row g-4" id="productsGrid">
+                <!-- Products will be loaded dynamically via js/products.js and js/script.js -->
+                <div class="col-12 text-center py-5">
+                    <div class="spinner-border text-gold" role="status">
+                        <span class="visually-hidden">Cargando...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== CONTACTO ===== -->
+    <section class="info-section bg-light" id="contacto">
+        <div class="container text-center">
+            <div class="section-eyebrow-wrap">
+                <span class="section-eyebrow">Pedidos y atención</span>
+            </div>
+            <h2 class="section-title">Contáctanos</h2>
+            <p class="section-subtitle mb-5">Estamos listos para atender tu pedido</p>
+
+            <a href="https://wa.me/5214531464786" target="_blank" class="btn btn-premium-primary btn-lg">
+                <i class="bi bi-whatsapp me-2"></i> Enviar Mensaje
+            </a>
+        </div>
+    </section>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="footer">
+        <div class="container position-relative" style="z-index:2;">
+            <div class="row">
+                <div class="col-lg-4 mb-5">
+                    <div class="d-flex align-items-center gap-2 mb-3">
+                        <img src="modelorama-vector-logo-seeklogo/modelorama-seeklogo.png" alt="Modelorama Logo"
+                            style="height: 32px; width: auto; filter: brightness(1.2);">
+                        <div>
+                            <span
+                                style="font-family: 'Outfit', sans-serif; font-size: 0.6rem; color: rgba(255,255,255,0.4); letter-spacing: 2.5px; text-transform: uppercase;">Coalcomán,
+                                Michoacán</span>
+                        </div>
+                    </div>
+                    <p class="footer-brand-tagline">Sucursal oficial Modelorama. La mejor cerveza de Grupo Modelo,
+                        siempre fría y al mejor precio.</p>
+                    <div class="footer-legal-badge mt-3">
+                        <i class="bi bi-shield-check"></i> Venta responsable de alcohol
+                    </div>
+                </div>
+                <div class="col-lg-4 mb-4">
+                    <h5 class="footer-title">Navegación</h5>
+                    <ul class="footer-links p-0">
+                        <li><a href="#inicio"><i class="bi bi-chevron-right me-1"
+                                    style="font-size:0.7rem;"></i>Inicio</a></li>
+                        <li><a href="#promociones"><i class="bi bi-chevron-right me-1"
+                                    style="font-size:0.7rem;"></i>Promociones</a></li>
+                        <li><a href="#productos"><i class="bi bi-chevron-right me-1"
+                                    style="font-size:0.7rem;"></i>Catálogo</a></li>
+                        <li><a href="admin.html" target="_blank"><i class="bi bi-chevron-right me-1"
+                                    style="font-size:0.7rem;"></i>Panel Admin</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-4 mb-4">
+                    <h5 class="footer-title">Legal y Contacto</h5>
+                    <ul class="footer-links p-0">
+                        <li><a href="#"
+                                onclick="event.preventDefault(); Swal.fire({title:'<span style=color:#092440>Aviso de Privacidad</span>', html:'<p style=\'text-align:left;font-size:0.9rem;color:#092440\'>Modelorama Coalcomán protege tus datos personales conforme a la Ley Federal de Protección de Datos Personales.</p>', confirmButtonColor:'#0047AB', background:'#ffffff', color:'#092440'})"><i
+                                    class="bi bi-chevron-right me-1" style="font-size:0.7rem;"></i>Aviso de
+                                Privacidad</a></li>
+                        <li><a href="#"
+                                onclick="event.preventDefault(); Swal.fire({title:'<span style=color:#092440>Términos y Condiciones</span>', html:'<p style=\'text-align:left;font-size:0.9rem;color:#092440\'>Prohibida la venta de alcohol a menores de 18 años. Precios sujetos a cambio sin previo aviso.</p>', confirmButtonColor:'#0047AB', background:'#ffffff', color:'#092440'})"><i
+                                    class="bi bi-chevron-right me-1" style="font-size:0.7rem;"></i>Términos y
+                                Condiciones</a></li>
+                        <li><a href="https://wa.me/5214531464786" target="_blank"><i
+                                    class="bi bi-whatsapp me-1"></i>WhatsApp</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom-bar">
+                <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-2">
+                    <p>&copy; 2026 Modelorama Coalcomán. Todos los derechos reservados.</p>
+                    <p style="color: rgba(255,255,255,0.3);"><i class="bi bi-exclamation-triangle me-1"></i>Evite el
+                        exceso · Prohibida la venta a menores de 18 años</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- WhatsApp Float Removed -->
+
+    <!-- CART OFFCANVAS -->
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="cartOffcanvas" aria-labelledby="cartOffcanvasLabel"
+        style="z-index: 9999;">
+        <div class="offcanvas-header border-bottom border-secondary"
+            style="border-color: rgba(9, 36, 64, 0.1) !important;">
+            <h5 class="offcanvas-title" id="cartOffcanvasLabel" style="color: #092440; font-weight: 800;">
+                <i class="bi bi-bag-check-fill me-2 text-gold"></i>Tu Carrito
+            </h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body d-flex flex-column">
+            <!-- Loyalty points removed -->
+
+            <div id="cartItems" class="flex-grow-1" style="overflow-y: auto;">
+                <!-- Cart items rendered by JS -->
+                <div class="text-center py-5">
+                    <i class="bi bi-cart-x fs-1 text-muted opacity-50"></i>
+                    <p class="text-muted mt-3">Tu carrito está vacío</p>
+                    <button class="btn btn-sm btn-outline-primary mt-2" data-bs-dismiss="offcanvas">
+                        Ir a comprar
+                    </button>
+                </div>
+            </div>
+
+            <!-- Map container inside the cart offcanvas -->
+            <div class="mt-3 pt-3 border-top" id="mapSection"
+                style="display: none; border-top-color: rgba(9, 36, 64, 0.1) !important;">
+                <h6 class="mb-2" style="color: #092440; font-weight: 700;">
+                    <i class="bi bi-geo-alt-fill me-1 text-danger"></i> Entrega
+                </h6>
+                <div id="deliveryMap"
+                    style="height: 150px; width: 100%; border-radius: 12px; border: 1px solid rgba(9, 36, 64, 0.1);">
+                </div>
+            </div>
+        </div>
+        <div class="offcanvas-footer p-3 border-top bg-light">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <span class="text-secondary fw-bold">Total Estimado:</span>
+                <span id="cartTotal" class="fw-bold fs-3" style="color: #092440;">$0.00</span>
+            </div>
+            <div class="d-grid gap-2">
+                <button class="btn btn-premium-primary btn-lg" onclick="sendCartToWhatsApp()">
+                    <i class="bi bi-whatsapp me-2"></i> Completar Pedido
+                </button>
+                <button class="btn btn-danger text-white btn-sm" onclick="clearCart()">
+                    Vaciar Carrito
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- QUICK VIEW MODAL -->
+    <div class="modal fade" id="quickViewModal" tabindex="-1" style="z-index: 10000;">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content overflow-hidden border-0 shadow-lg" style="border-radius: 24px;">
+                <button type="button" class="btn-close position-absolute top-0 end-0 m-3" data-bs-dismiss="modal"
+                    style="z-index: 10;"></button>
+                <div class="modal-body p-0">
+                    <div class="row g-0">
+                        <div
+                            class="col-md-6 bg-light d-flex align-items-center justify-content-center p-5 position-relative overflow-hidden">
+                            <div class="quick-view-bg-glow"></div>
+                            <img id="qvImage" src="" class="img-fluid position-relative"
+                                style="z-index: 2; max-height: 300px; filter: drop-shadow(0 20px 30px rgba(0,0,0,0.2));"
+                                alt="Producto">
+                            <div id="qvIconFallback" class="text-center" style="display: none;">
+                                <i id="qvIcon" class="bi fs-1"></i>
+                            </div>
+                        </div>
+                        <div class="col-md-6 p-4 d-flex flex-column">
+                            <div class="mb-auto">
+                                <span id="qvBrand"
+                                    class="text-uppercase text-warning fw-bold small letter-spacing-2">Marca</span>
+                                <h2 id="qvName" class="fw-bold text-dark mt-1 mb-2">Nombre del Producto</h2>
+                                <p id="qvDesc" class="text-muted mb-4">Descripción detallada del producto.</p>
+
+                                <div class="d-flex align-items-center mb-3">
+                                    <h3 id="qvPrice" class="text-primary fw-bold mb-0 me-3">$0.00</h3>
+                                    <span id="qvOldPrice"
+                                        class="text-decoration-line-through text-muted small">$0.00</span>
+                                </div>
+
+                                <!-- Combo breakdown (hidden by default) -->
+                                <div id="qvComboBreakdown" class="mb-3" style="display:none;">
+                                    <h6 class="fw-bold text-dark mb-2"><i
+                                            class="bi bi-box2-heart me-1 text-danger"></i>Incluye:</h6>
+                                    <div id="qvComboItems" class="d-flex flex-wrap gap-1"></div>
+                                    <div id="qvComboSavings" class="mt-2"></div>
+                                </div>
+                            </div>
+
+                            <div class="mt-4">
+                                <!-- Quantity selector -->
+                                <div class="d-flex align-items-center gap-2 mb-3" id="qvQtyRow">
+                                    <label class="fw-bold small text-muted mb-0">Cantidad:</label>
+                                    <div class="d-flex align-items-center bg-light rounded-pill p-1 border">
+                                        <button class="btn btn-sm btn-link text-dark p-0 px-2 text-decoration-none"
+                                            onclick="window.changeQVQty(-1)">-</button>
+                                        <span id="qvQty" class="fw-bold mx-2"
+                                            style="min-width:20px;text-align:center;">1</span>
+                                        <button class="btn btn-sm btn-link text-dark p-0 px-2 text-decoration-none"
+                                            onclick="window.changeQVQty(1)">+</button>
+                                    </div>
+                                </div>
+                                <div class="d-flex gap-3">
+                                    <button class="btn btn-outline-dark flex-grow-1" onclick="window.addToCartFromQV()">
+                                        <i class="bi bi-cart-plus me-2"></i> Agregar
+                                    </button>
+                                    <button class="btn btn-premium-primary flex-grow-1" onclick="window.buyNowFromQV()">
+                                        Comprar Ahora
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== MOBILE BOTTOM NAVIGATION ===== -->
+    <nav class="mobile-bottom-nav d-md-none">
+        <a href="#inicio" class="mobile-nav-item active">
+            <i class="bi bi-house-door-fill"></i>
+            <span>Inicio</span>
+        </a>
+        <a href="#productos" class="mobile-nav-item">
+            <i class="bi bi-grid-fill"></i>
+            <span>Catálogo</span>
+        </a>
+        <a href="javascript:void(0)" class="mobile-nav-item center-fab" onclick="window.openCartModal()">
+            <div class="fab-circle">
+                <i class="bi bi-bag-check-fill"></i>
+                <span id="mobileCartCount"
+                    class="badge rounded-pill bg-danger position-absolute top-0 start-100 translate-middle"
+                    style="display:none; font-size: 0.6rem;">0</span>
+            </div>
+        </a>
+        <a href="#promociones" class="mobile-nav-item">
+            <i class="bi bi-percent"></i>
+            <span>Ofertas</span>
+        </a>
+        <a href="javascript:void(0)" class="mobile-nav-item" onclick="window.openProfileModal()">
+            <i class="bi bi-person-fill"></i>
+            <span>Perfil</span>
+        </a>
+    </nav>
+
+    <!-- USER PROFILE MODAL -->
+    <div class="modal fade" id="profileModal" tabindex="-1" style="z-index: 10000;">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg" style="border-radius: 24px; overflow: hidden;">
+                <div class="modal-header border-0 bg-premium-gradient text-white p-4">
+                    <h5 class="modal-title fw-bold"><i class="bi bi-person-circle me-2"></i> Mi Perfil</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4 text-dark">
+                    <p class="text-muted small mb-4">Guarda tus datos para agilizar tus pedidos por WhatsApp.</p>
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control text-dark" id="profileName" placeholder="Tu Nombre">
+                        <label for="profileName" class="text-dark">Nombre Completo</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <textarea class="form-control text-dark" placeholder="Dirección de entrega" id="profileAddress"
+                            style="height: 100px"></textarea>
+                        <label for="profileAddress" class="text-dark">Dirección de Entrega</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="tel" class="form-control text-dark" id="profilePhone" placeholder="Teléfono">
+                        <label for="profilePhone" class="text-dark">Teléfono (Opcional)</label>
+                    </div>
+                </div>
+                <div class="modal-footer border-0 p-3 bg-light justify-content-center">
+                    <button type="button" class="btn btn-premium-primary w-100" onclick="saveProfile()">
+                        Guardar Datos
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== QUICK ACCESS FAB ===== -->
+    <div class="quick-access-container position-fixed"
+        style="bottom: 30px; right: 30px; z-index: 1050; display: flex; flex-direction: column-reverse; align-items: flex-end; gap: 10px;">
+        <button
+            class="btn btn-premium-primary rounded-circle shadow-lg d-flex align-items-center justify-content-center"
+            style="width: 60px; height: 60px; font-size: 1.5rem;"
+            onclick="const m = document.getElementById('fabMenu'); m.style.display = m.style.display === 'none' ? 'flex' : 'none';"
+            title="Accesos Rápidos">
+            <i class="bi bi-lightning-charge-fill text-gold"></i>
+        </button>
+        <div id="fabMenu"
+            style="display: none; flex-direction: column; gap: 10px; align-items: center; margin-bottom: 5px;">
+            <button class="btn btn-light rounded-circle shadow border d-flex align-items-center justify-content-center"
+                style="width: 45px; height: 45px; color: #092440;" onclick="window.openCartModal()" title="Ver Carrito">
+                <i class="bi bi-cart3 fs-5"></i>
+            </button>
+            <a class="btn btn-success rounded-circle shadow d-flex align-items-center justify-content-center"
+                style="width: 45px; height: 45px;" href="https://wa.me/5214531464786" target="_blank" title="WhatsApp">
+                <i class="bi bi-whatsapp fs-5"></i>
+            </a>
+            <button
+                class="btn btn-info rounded-circle shadow text-white d-flex align-items-center justify-content-center"
+                style="width: 45px; height: 45px;"
+                onclick="document.getElementById('productos').scrollIntoView({behavior:'smooth'})" title="Catálogo">
+                <i class="bi bi-grid-fill fs-5"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
+
+    <!-- Firebase Compat SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore-compat.js"></script>
+
+    <script src="js/firebase-config.js"></script>
+    <script src="js/products.js"></script>
+    <script src="js/script.js"></script>
+    <script src="js/map.js"></script>
+
+    <!-- PWA Service Worker Registration -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then(reg => console.log('SW registrado: ', reg.scope))
+                    .catch(err => console.log('SW error: ', err));
+            });
+        }
+    </script>
+</body>
+
+</html>

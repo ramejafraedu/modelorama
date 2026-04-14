@@ -1,0 +1,10 @@
+{
+  "users": [
+    {
+      "localId": "ramejafraUser",
+      "email": "ramejafra@gmail.com",
+      "passwordHash": "Lg+EmsqWk/eNlqB2dMrlQ2B+bF4S39P/p7E+2C/W08g=",
+      "salt": "c2FsdA=="
+    }
+  ]
+}

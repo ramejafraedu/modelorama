@@ -1,0 +1,1413 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modelorama Admin | Premium Dashboard</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@4/dark.css" rel="stylesheet">
+    <link href="css/styles.css?v=2.0" rel="stylesheet">
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+        :root {
+            --admin-bg: #f0f2f5;
+            --admin-surface: #ffffff;
+            --admin-primary: #0047AB;
+            --admin-accent: #FFD100;
+            --admin-text: #1a1d21;
+            --admin-text-secondary: #5f6368;
+            --admin-border: rgba(0, 71, 171, 0.08);
+            --admin-shadow: 0 2px 12px rgba(0, 71, 171, 0.08);
+            --admin-shadow-lg: 0 8px 30px rgba(0, 71, 171, 0.12);
+            --admin-radius: 16px;
+            --admin-radius-sm: 10px;
+        }
+
+        body {
+            background-color: var(--admin-bg);
+            color: var(--admin-text);
+            min-height: 100vh;
+            font-family: 'Inter', 'Outfit', sans-serif;
+        }
+
+        /* ===== PREMIUM HEADER ===== */
+        .admin-header {
+            background: linear-gradient(135deg, #0047AB 0%, #0060E0 50%, #2979FF 100%);
+            padding: 1.25rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0, 71, 171, 0.3);
+        }
+
+        .admin-header h4 {
+            color: #ffffff !important;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        .admin-header .text-muted,
+        .admin-header .text-muted a {
+            color: rgba(255, 255, 255, 0.6) !important;
+        }
+
+        .admin-header .text-muted a:hover {
+            color: var(--admin-accent) !important;
+        }
+
+        .admin-header .text-gold {
+            color: var(--admin-accent) !important;
+        }
+
+        /* ===== STAT CARDS ===== */
+        .stat-card {
+            background: var(--admin-surface);
+            border-radius: var(--admin-radius);
+            padding: 1.5rem;
+            border: 1px solid var(--admin-border);
+            box-shadow: var(--admin-shadow);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .stat-card:hover {
+            box-shadow: var(--admin-shadow-lg);
+            transform: translateY(-2px);
+        }
+
+        .stat-card .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+        }
+
+        .stat-card .stat-value {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: var(--admin-primary);
+            line-height: 1;
+        }
+
+        .stat-card .stat-label {
+            font-size: 0.8rem;
+            color: var(--admin-text-secondary);
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* ===== NAV TABS ===== */
+        .admin-nav-tabs {
+            background: var(--admin-surface);
+            border-radius: var(--admin-radius);
+            padding: 0.5rem;
+            border: 1px solid var(--admin-border);
+            box-shadow: var(--admin-shadow);
+            gap: 0.5rem;
+            border-bottom: none;
+        }
+
+        .admin-nav-tabs .nav-link {
+            color: var(--admin-text-secondary) !important;
+            border: none !important;
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--admin-radius-sm);
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.25s ease;
+            position: relative;
+        }
+
+        .admin-nav-tabs .nav-link:hover,
+        .admin-nav-tabs .nav-link:focus {
+            color: var(--admin-primary) !important;
+            background: rgba(0, 71, 171, 0.05) !important;
+        }
+
+        .admin-nav-tabs .nav-link.active,
+        .admin-nav-tabs .nav-link.active:hover,
+        .admin-nav-tabs .nav-link.active:focus {
+            color: #fff !important;
+            background: var(--admin-primary) !important;
+            box-shadow: 0 4px 12px rgba(0, 71, 171, 0.3);
+        }
+
+        .admin-nav-tabs .nav-link.active::after {
+            display: none;
+        }
+
+        /* ===== GLASS CARDS / TABLE CARDS ===== */
+        .glass-card {
+            background: var(--admin-surface);
+            border: 1px solid var(--admin-border);
+            border-radius: var(--admin-radius);
+            padding: 1.5rem;
+            height: 100%;
+            transition: all 0.3s ease;
+            box-shadow: var(--admin-shadow);
+        }
+
+        .glass-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--admin-shadow-lg);
+            border-color: rgba(255, 201, 44, 0.4);
+        }
+
+        /* ===== TABLE ===== */
+        .table {
+            --bs-table-bg: transparent;
+            --bs-table-color: var(--admin-text);
+            --bs-table-hover-bg: rgba(0, 71, 171, 0.02);
+            --bs-table-border-color: var(--admin-border);
+        }
+
+        .table thead {
+            background: linear-gradient(135deg, #f8f9fb 0%, #eef1f5 100%);
+        }
+
+        .table th {
+            color: var(--admin-text-secondary);
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.7rem;
+            letter-spacing: 1.2px;
+            border-bottom: 2px solid var(--admin-border);
+            padding: 1rem 1.25rem;
+        }
+
+        .table td {
+            vertical-align: middle;
+            padding: 0.875rem 1.25rem;
+            font-size: 0.9rem;
+        }
+
+        .table tbody tr {
+            transition: background 0.2s ease;
+        }
+
+        .table tbody tr:hover {
+            background: rgba(255, 209, 0, 0.04) !important;
+        }
+
+        /* ===== SEARCH BAR ===== */
+        .admin-search {
+            background: var(--admin-surface);
+            border: 2px solid var(--admin-border);
+            border-radius: 50px;
+            padding: 0.625rem 1.25rem;
+            transition: all 0.3s ease;
+            box-shadow: var(--admin-shadow);
+        }
+
+        .admin-search:focus-within {
+            border-color: var(--admin-accent);
+            box-shadow: 0 0 0 4px rgba(255, 209, 0, 0.15);
+        }
+
+        .admin-search input {
+            border: none !important;
+            background: transparent !important;
+            box-shadow: none !important;
+            outline: none !important;
+            color: var(--admin-text) !important;
+            font-size: 0.9rem;
+            width: 100%;
+        }
+
+        .admin-search input::placeholder {
+            color: #adb5bd;
+        }
+
+        /* ===== FORMS ===== */
+        .form-control-dark {
+            background: var(--admin-surface);
+            border: 1.5px solid #dee2e6;
+            color: var(--admin-text);
+            border-radius: var(--admin-radius-sm);
+            padding: 0.625rem 1rem;
+            font-size: 0.9rem;
+            transition: all 0.25s ease;
+        }
+
+        .form-control-dark:focus {
+            background: var(--admin-surface);
+            color: var(--admin-text);
+            border-color: var(--admin-accent);
+            box-shadow: 0 0 0 4px rgba(255, 209, 0, 0.15);
+        }
+
+        .form-control-dark::placeholder {
+            color: #adb5bd;
+        }
+
+        .form-select.form-control-dark {
+            border-radius: var(--admin-radius-sm);
+        }
+
+        .form-label {
+            color: var(--admin-text-secondary) !important;
+            font-weight: 600 !important;
+            font-size: 0.75rem !important;
+            letter-spacing: 0.5px;
+        }
+
+        /* ===== BUTTONS ===== */
+        .btn-admin-primary {
+            background: linear-gradient(135deg, #0047AB 0%, #0060E0 100%);
+            color: #fff;
+            border: none;
+            border-radius: var(--admin-radius-sm);
+            padding: 0.7rem 1.5rem;
+            font-weight: 600;
+            font-size: 0.9rem;
+            box-shadow: 0 4px 12px rgba(0, 71, 171, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .btn-admin-primary:hover {
+            background: linear-gradient(135deg, #0060E0 0%, #2979FF 100%);
+            color: #fff;
+            box-shadow: 0 6px 20px rgba(0, 71, 171, 0.4);
+            transform: translateY(-1px);
+        }
+
+        .btn-admin-gold {
+            background: linear-gradient(135deg, #FFD100 0%, #E5BC00 100%);
+            color: var(--admin-primary);
+            border: none;
+            border-radius: var(--admin-radius-sm);
+            padding: 0.7rem 1.5rem;
+            font-weight: 700;
+            font-size: 0.9rem;
+            box-shadow: 0 4px 12px rgba(255, 209, 0, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .btn-admin-gold:hover {
+            background: linear-gradient(135deg, #E5BC00 0%, #D49B00 100%);
+            color: var(--admin-primary);
+            box-shadow: 0 6px 20px rgba(255, 209, 0, 0.5);
+            transform: translateY(-1px);
+        }
+
+        /* ===== MODALS ===== */
+        .modal-content {
+            border-radius: var(--admin-radius) !important;
+            border: 1px solid var(--admin-border) !important;
+            box-shadow: var(--admin-shadow-lg) !important;
+            overflow: hidden;
+        }
+
+        .admin-modal-header {
+            background: linear-gradient(135deg, #0047AB 0%, #0060E0 100%);
+            color: #fff;
+            padding: 1.25rem 1.5rem;
+        }
+
+        .admin-modal-header .modal-title {
+            color: #fff !important;
+            font-weight: 700;
+        }
+
+        .admin-modal-header .btn-close {
+            filter: brightness(0) invert(1);
+        }
+
+        /* ===== IMAGE UPLOAD ZONE ===== */
+        .upload-zone {
+            background: #f8f9fb;
+            border: 2px dashed #dee2e6;
+            border-radius: var(--admin-radius-sm);
+            padding: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .upload-zone:hover {
+            border-color: var(--admin-accent);
+            background: rgba(255, 201, 44, 0.04);
+        }
+
+        /* ===== FLOATING ACTION BUTTON ===== */
+        .admin-fab {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 1050;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            background: linear-gradient(135deg, #092440 0%, #10356e 100%);
+            color: #fff;
+            box-shadow: 0 6px 20px rgba(9, 36, 64, 0.4);
+            transition: all 0.3s ease;
+            border: none;
+        }
+
+        .admin-fab:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 25px rgba(9, 36, 64, 0.5);
+            color: var(--admin-accent);
+        }
+
+        /* ===== PRICE TAG ===== */
+        .price-tag {
+            background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+            color: #2e7d32;
+            font-weight: 700;
+            padding: 0.3rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+        }
+
+        /* ===== ACTION BUTTONS ===== */
+        .btn-action {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--admin-border);
+            background: var(--admin-surface);
+            color: var(--admin-text-secondary);
+            transition: all 0.25s ease;
+            font-size: 0.85rem;
+        }
+
+        .btn-action:hover {
+            background: var(--admin-primary);
+            color: #fff;
+            border-color: var(--admin-primary);
+            box-shadow: 0 4px 8px rgba(9, 36, 64, 0.2);
+        }
+
+        .btn-action.btn-action-danger:hover {
+            background: #dc3545;
+            border-color: #dc3545;
+        }
+
+        /* ===== CATEGORY/PACKAGE CARD ===== */
+        .admin-item-card {
+            background: var(--admin-surface);
+            border: 1px solid var(--admin-border);
+            border-radius: var(--admin-radius);
+            padding: 1.25rem;
+            box-shadow: var(--admin-shadow);
+            transition: all 0.3s ease;
+        }
+
+        .admin-item-card:hover {
+            box-shadow: var(--admin-shadow-lg);
+            transform: translateY(-2px);
+            border-color: rgba(255, 201, 44, 0.3);
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .admin-nav-tabs {
+                flex-wrap: nowrap;
+                overflow-x: auto;
+                padding: 0.375rem;
+            }
+
+            .admin-nav-tabs .nav-link {
+                padding: 0.6rem 1rem;
+                font-size: 0.8rem;
+                white-space: nowrap;
+            }
+
+            .stat-card .stat-value {
+                font-size: 1.35rem;
+            }
+        }
+
+        /* ===== BADGE SELECTOR ===== */
+        .badge-option {
+            transition: all 0.2s ease;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .badge-option.badge-selected {
+            background: var(--admin-primary, #0047AB) !important;
+            border-color: var(--admin-primary, #0047AB) !important;
+            color: #fff !important;
+            box-shadow: 0 3px 10px rgba(0, 71, 171, 0.35);
+            transform: scale(1.05);
+        }
+
+        /* ===== LOGIN OVERLAY ===== */
+        .admin-login-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            background: linear-gradient(135deg, #092440 0%, #0047AB 50%, #0060E0 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .admin-login-card {
+            background: rgba(255, 255, 255, 0.97);
+            border-radius: 24px;
+            padding: 3rem 2.5rem;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+
+        .admin-login-card .login-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #092440, #0047AB);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-size: 2rem;
+            color: #FFC92C;
+        }
+
+        .admin-login-card input {
+            text-align: center;
+            font-size: 1.1rem;
+            letter-spacing: 3px;
+            border-radius: 12px;
+            border: 2px solid #dee2e6;
+            padding: 0.8rem;
+        }
+
+        .admin-login-card input:focus {
+            border-color: #0047AB;
+            box-shadow: 0 0 0 4px rgba(0, 71, 171, 0.15);
+        }
+
+        /* ===== SETTINGS SECTION ===== */
+        .settings-card {
+            background: var(--admin-surface);
+            border: 1px solid var(--admin-border);
+            border-radius: var(--admin-radius);
+            padding: 1.5rem;
+            box-shadow: var(--admin-shadow);
+        }
+
+        .settings-card .settings-title {
+            font-weight: 700;
+            color: var(--admin-primary);
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .settings-textarea {
+            min-height: 200px;
+            font-size: 0.85rem;
+            line-height: 1.6;
+            border-radius: var(--admin-radius-sm);
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ===== LOGIN OVERLAY ===== -->
+    <div class="admin-login-overlay" id="loginOverlay">
+        <div class="admin-login-card">
+            <div class="login-icon">
+                <i class="bi bi-shield-lock-fill"></i>
+            </div>
+            <h4 class="fw-bold mb-1" style="color: #092440;">Panel Admin</h4>
+            <p class="text-muted small mb-4">Modelorama Coalcomán</p>
+            <input type="email" id="loginEmail" class="form-control mb-3" placeholder="admin@modelorama.com"
+                onkeydown="if(event.key==='Enter') document.getElementById('loginPassword').focus()">
+            <input type="password" id="loginPassword" class="form-control mb-3" placeholder="Contraseña"
+                onkeydown="if(event.key==='Enter') attemptLogin()">
+            <div id="loginError" class="text-danger small mb-3" style="display:none;">
+                <i class="bi bi-exclamation-circle me-1"></i>Credenciales incorrectas
+            </div>
+            <button class="btn btn-admin-primary w-100" onclick="attemptLogin()">
+                <i class="bi bi-box-arrow-in-right me-2"></i>Entrar
+            </button>
+            <div class="mt-4 text-muted small">
+                <!-- Removed default password text -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="admin-header">
+        <div class="container d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-center gap-3">
+                <i class="bi bi-shield-lock-fill fs-2 text-gold"></i>
+                <div>
+                    <h4 class="mb-0 fw-bold">Admin Dashboard</h4>
+                    <small class="text-muted"><a href="index.html" class="text-muted text-decoration-none"><i
+                                class="bi bi-arrow-left me-1"></i> Ir a la tienda</a></small>
+                </div>
+            </div>
+            <div>
+                <button class="btn btn-outline-light btn-sm" onclick="logout()">
+                    <i class="bi bi-box-arrow-right"></i> Salir
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="container mt-4 mb-5 pb-5">
+
+        <!-- Stat Cards -->
+        <div class="row g-3 mb-4" id="adminStats">
+            <div class="col-6 col-md-3">
+                <div class="stat-card">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="stat-icon" style="background: rgba(9,36,64,0.1); color: #092440;"><i
+                                class="bi bi-box-seam"></i></div>
+                        <div>
+                            <div class="stat-value" id="statProducts">0</div>
+                            <div class="stat-label">Productos</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="stat-card">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="stat-icon" style="background: rgba(220,53,69,0.1); color: #dc3545;"><i
+                                class="bi bi-gift"></i></div>
+                        <div>
+                            <div class="stat-value" id="statPackages">0</div>
+                            <div class="stat-label">Paquetes</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="stat-card">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="stat-icon" style="background: rgba(255,201,44,0.15); color: #e6a800;"><i
+                                class="bi bi-tags"></i></div>
+                        <div>
+                            <div class="stat-value" id="statCategories">0</div>
+                            <div class="stat-label">Categorías</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="stat-card">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="stat-icon" style="background: rgba(16,185,129,0.1); color: #10B981;"><i
+                                class="bi bi-snow3"></i></div>
+                        <div>
+                            <div class="stat-value" id="statCold">0</div>
+                            <div class="stat-label">Productos Fríos</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Nav Tabs -->
+        <ul class="nav nav-tabs admin-nav-tabs mb-4 border-0" id="adminTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="products-tab" data-bs-toggle="tab" data-bs-target="#products"
+                    type="button" role="tab">
+                    <i class="bi bi-box-seam me-2"></i>Productos
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="packages-tab" data-bs-toggle="tab" data-bs-target="#packages" type="button"
+                    role="tab">
+                    <i class="bi bi-gift me-2"></i>Paquetes
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="categories-tab" data-bs-toggle="tab" data-bs-target="#categories"
+                    type="button" role="tab">
+                    <i class="bi bi-tags me-2"></i>Categorías
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="settings-tab" data-bs-toggle="tab" data-bs-target="#settings" type="button"
+                    role="tab">
+                    <i class="bi bi-gear me-2"></i>Ajustes
+                </button>
+            </li>
+        </ul>
+
+        <!-- Tab Content -->
+        <div class="tab-content" id="adminTabsContent">
+
+            <!-- ================= PRODUCTS TAB ================= -->
+            <div class="tab-pane fade show active" id="products" role="tabpanel">
+                <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+                    <div class="flex-grow-1" style="max-width: 400px;">
+                        <div class="admin-search d-flex align-items-center">
+                            <i class="bi bi-search text-muted me-2"></i>
+                            <input type="text" id="adminSearch" placeholder="Buscar producto..."
+                                onkeyup="renderAdminProducts()">
+                        </div>
+                    </div>
+                    <button class="btn btn-admin-gold d-none d-md-flex align-items-center"
+                        onclick="openAddProductModal()">
+                        <i class="bi bi-plus-lg me-2"></i> Nuevo Producto
+                    </button>
+                </div>
+
+                <div class="glass-card p-0 overflow-hidden">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead>
+                                <tr>
+                                    <th class="px-4 py-3">Detalle</th>
+                                    <th class="py-3">Categoría</th>
+                                    <th class="py-3">Stock</th>
+                                    <th class="py-3">Precio</th>
+                                    <th class="py-3 text-end px-4">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adminProductTable">
+                                <!-- Populated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ================= PACKAGES TAB ================= -->
+            <div class="tab-pane fade" id="packages" role="tabpanel">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h5 class="mb-0 fw-bold" style="color: var(--admin-primary);">Combos y Paquetes</h5>
+                    <button class="btn btn-admin-gold d-none d-md-flex align-items-center"
+                        onclick="openAddPackageModal()">
+                        <i class="bi bi-plus-lg me-2"></i> Crear Paquete
+                    </button>
+                </div>
+
+                <div class="row g-4" id="adminPackagesGrid">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+
+            <!-- ================= CATEGORIES TAB ================= -->
+            <div class="tab-pane fade" id="categories" role="tabpanel">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <p class="text-muted mb-0">Gestiona las categorías de productos.</p>
+                    <button class="btn btn-admin-primary d-none d-md-flex align-items-center"
+                        onclick="openAddCategoryModal()">
+                        <i class="bi bi-plus-lg me-2"></i> Nueva Categoría
+                    </button>
+                </div>
+
+                <div class="glass-card p-0 overflow-hidden">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead>
+                                <tr>
+                                    <th class="px-4 py-3">Visualización (Story)</th>
+                                    <th class="py-3">Nombre / ID</th>
+                                    <th class="py-3">Orden</th>
+                                    <th class="py-3 text-end px-4">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adminCategoryTable">
+                                <!-- Populated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ================= SETTINGS TAB ================= -->
+            <div class="tab-pane fade" id="settings" role="tabpanel">
+                <div class="row g-4">
+
+                    <!-- Password Change -->
+                    <div class="col-md-6">
+                        <div class="settings-card h-100">
+                            <div class="settings-title">
+                                <i class="bi bi-key-fill text-warning"></i> Cambiar Contraseña
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label text-muted small text-uppercase fw-bold">Contraseña
+                                    Actual</label>
+                                <input type="password" id="currentPassword" class="form-control form-control-dark"
+                                    placeholder="••••">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label text-muted small text-uppercase fw-bold">Nueva
+                                    Contraseña</label>
+                                <input type="password" id="newPassword" class="form-control form-control-dark"
+                                    placeholder="Mínimo 4 caracteres">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label text-muted small text-uppercase fw-bold">Confirmar
+                                    Nueva</label>
+                                <input type="password" id="confirmPassword" class="form-control form-control-dark"
+                                    placeholder="Repite la contraseña">
+                            </div>
+                            <button class="btn btn-admin-primary w-100" onclick="changePassword()">
+                                <i class="bi bi-check-lg me-2"></i>Actualizar Contraseña
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Create Admin -->
+                    <div class="col-md-6">
+                        <div class="settings-card h-100 d-flex flex-column">
+                            <div class="settings-title">
+                                <i class="bi bi-person-plus-fill text-info"></i> Crear Administrador
+                            </div>
+                            <p class="text-muted small">Registra una nueva cuenta de acceso al panel principal.</p>
+                            <div class="mb-3">
+                                <label class="form-label text-muted small text-uppercase fw-bold">Correo
+                                    Electrónico</label>
+                                <input type="email" id="newAdminEmail" class="form-control form-control-dark"
+                                    placeholder="ejemplo@modelorama.com">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label text-muted small text-uppercase fw-bold">Contraseña</label>
+                                <input type="password" id="newAdminPass" class="form-control form-control-dark"
+                                    placeholder="Mínimo 6 caracteres">
+                            </div>
+                            <div class="alert alert-warning py-2 mb-3 mt-auto" style="font-size: 0.8rem;">
+                                <i class="bi bi-exclamation-triangle-fill me-1"></i> Se suspenderá tu sesión actual al
+                                crearla por seguridad.
+                            </div>
+                            <button class="btn btn-admin-gold w-100" onclick="createNewAdmin()">
+                                <i class="bi bi-person-check-fill me-2"></i>Crear Cuenta
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Store Info -->
+                    <div class="col-md-12">
+                        <div class="settings-card h-100 d-flex flex-column">
+                            <div class="settings-title">
+                                <i class="bi bi-shop text-primary"></i> Información de la Tienda
+                            </div>
+                            <p class="text-muted small">Configura los datos principales de contacto de la sucursal.</p>
+
+                            <div class="mb-3 mt-2">
+                                <label class="form-label text-muted small text-uppercase fw-bold">Número de
+                                    WhatsApp</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-end-0"><i
+                                            class="bi bi-whatsapp text-success"></i></span>
+                                    <input type="tel" id="settingsWhatsapp"
+                                        class="form-control form-control-dark border-start-0"
+                                        placeholder="Ej: 5214531464786" value="5214531464786">
+                                </div>
+                                <div class="small text-muted mt-1" style="font-size: 0.75rem;">Incluye el código de país
+                                    (Ej: 521 para México).</div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label text-muted small text-uppercase fw-bold">Enlace de Google
+                                    Maps</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-end-0"><i
+                                            class="bi bi-geo-alt text-danger"></i></span>
+                                    <input type="url" id="settingsMapUrl"
+                                        class="form-control form-control-dark border-start-0"
+                                        placeholder="Ej: https://maps.app.goo.gl/...">
+                                </div>
+                                <div class="small text-muted mt-1" style="font-size: 0.75rem;">El enlace para que los
+                                    clientes lleguen a la tienda.</div>
+                            </div>
+
+                            <button class="btn btn-admin-primary w-100 mt-auto" onclick="saveStoreInfo()">
+                                <i class="bi bi-save me-2"></i>Guardar Información
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Privacy Policy -->
+                    <div class="col-12">
+                        <div class="settings-card">
+                            <div class="settings-title">
+                                <i class="bi bi-shield-check text-info"></i> Aviso de Privacidad
+                            </div>
+                            <textarea id="settingsPrivacy" class="form-control form-control-dark settings-textarea"
+                                placeholder="Escribe aquí el aviso de privacidad..."></textarea>
+                            <button class="btn btn-admin-gold mt-3" onclick="saveLegalContent('privacy')">
+                                <i class="bi bi-save me-2"></i>Guardar Privacidad
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Terms & Conditions -->
+                    <div class="col-12">
+                        <div class="settings-card">
+                            <div class="settings-title">
+                                <i class="bi bi-file-earmark-text text-warning"></i> Términos y Condiciones
+                            </div>
+                            <textarea id="settingsTerms" class="form-control form-control-dark settings-textarea"
+                                placeholder="Escribe aquí los términos y condiciones..."></textarea>
+                            <button class="btn btn-admin-gold mt-3" onclick="saveLegalContent('terms')">
+                                <i class="bi bi-save me-2"></i>Guardar Términos
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- ===== CROSS-SELL / POP-UPS ===== -->
+                    <div class="col-12">
+                        <div class="settings-card">
+                            <div class="settings-title d-flex justify-content-between align-items-center">
+                                <span><i class="bi bi-megaphone-fill text-danger"></i> Pop-ups de Venta Cruzada</span>
+                                <button class="btn btn-admin-gold btn-sm" onclick="openCrossSellForm()">
+                                    <i class="bi bi-plus-lg me-1"></i>Nueva Regla
+                                </button>
+                            </div>
+                            <p class="text-muted small mb-3">Configura pop-ups automáticos que sugieren un producto
+                                cuando el cliente agrega algo de cierta categoría al carrito.</p>
+
+                            <!-- Cross-sell form (hidden by default) -->
+                            <div id="crossSellForm" class="border rounded-3 p-3 mb-3 bg-light" style="display:none;">
+                                <input type="hidden" id="csRuleId">
+                                <div class="row g-3">
+                                    <div class="col-md-4">
+                                        <label class="form-label text-muted small text-uppercase fw-bold">Categoría
+                                            Disparadora</label>
+                                        <select id="csTriggerCategory" class="form-select form-control-dark">
+                                            <!-- Populated by JS -->
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label text-muted small text-uppercase fw-bold">Producto a
+                                            Sugerir</label>
+                                        <select id="csSuggestProduct" class="form-select form-control-dark">
+                                            <!-- Populated by JS -->
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label text-muted small text-uppercase fw-bold">Mensaje
+                                            Personalizado</label>
+                                        <input type="text" id="csCustomMessage" class="form-control form-control-dark"
+                                            placeholder="Ej: ¡No olvides el hielo!">
+                                    </div>
+                                </div>
+                                <div class="d-flex gap-2 mt-3">
+                                    <button class="btn btn-admin-primary btn-sm" onclick="saveCrossSellRule()">
+                                        <i class="bi bi-check-lg me-1"></i>Guardar Regla
+                                    </button>
+                                    <button class="btn btn-outline-secondary btn-sm" onclick="closeCrossSellForm()">
+                                        Cancelar
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Cross-sell rules table -->
+                            <div class="table-responsive">
+                                <table class="table table-hover mb-0 align-middle">
+                                    <thead>
+                                        <tr>
+                                            <th class="small text-muted">Al agregar de...</th>
+                                            <th class="small text-muted">Sugerir...</th>
+                                            <th class="small text-muted">Mensaje</th>
+                                            <th class="small text-muted text-end">Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="crossSellRulesTable">
+                                        <tr>
+                                            <td colspan="4" class="text-center text-muted py-3">Cargando reglas...</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Mobile Action Button Contextual based on active tab -->
+    <button class="btn btn-premium-primary admin-fab d-md-none" id="mobileFab" onclick="handleMobileFab()">
+        <i class="bi bi-plus-lg"></i>
+    </button>
+
+
+    <!-- ================= MODALS ================= -->
+
+    <!-- PRODUCT MODAL -->
+    <div class="modal fade age-modal" id="productModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content border-0 shadow-lg" style="background: #fff;">
+                <div class="modal-header admin-modal-header border-0">
+                    <h5 class="modal-title fw-bold" id="productModalTitle">Producto</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body py-4 px-4">
+                    <input type="hidden" id="editId">
+                    <input type="hidden" id="editIsPackage" value="false">
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <label class="form-label text-muted small text-uppercase fw-bold">Nombre</label>
+                            <input type="text" id="editName" class="form-control form-control-dark"
+                                placeholder="Ej: Corona Media">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label text-muted small text-uppercase fw-bold">Marca</label>
+                            <input type="text" id="editBrand" class="form-control form-control-dark"
+                                placeholder="Ej: Grupo Modelo">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label text-muted small text-uppercase fw-bold">Categoría</label>
+                            <select id="editCategory" class="form-select form-control-dark">
+                                <!-- Populated dynamically -->
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label text-success small text-uppercase fw-bold">Precio Unitario
+                                ($)</label>
+                            <input type="number" id="editPrice" class="form-control form-control-dark fw-bold fs-5"
+                                step="0.50">
+                        </div>
+                        <div class="col-md-2" id="stockInputContainer">
+                            <label class="form-label small text-uppercase fw-bold text-info"
+                                style="color: #0dcaf0 !important;">Stock</label>
+                            <input type="number" id="editStock"
+                                class="form-control form-control-dark fw-bold fs-5 text-center" min="0" placeholder="0">
+                        </div>
+
+                        <!-- ===== PRECIO POR VOLUMEN ===== -->
+                        <div class="col-12 mt-2">
+                            <div class="border rounded-3 p-3 bg-light" style="border-color: #dee2e6 !important;">
+                                <label class="form-label text-primary small text-uppercase fw-bold mb-2">
+                                    <i class="bi bi-boxes me-1"></i> Precio especial por volumen (Opcional)
+                                </label>
+                                <div class="row g-2 align-items-center">
+                                    <div class="col-auto">
+                                        <span class="text-muted small">Al llevar</span>
+                                    </div>
+                                    <div class="col-3 col-md-2">
+                                        <input type="number" id="editVolumeQty"
+                                            class="form-control form-control-sm form-control-dark text-center"
+                                            placeholder="Cant.">
+                                    </div>
+                                    <div class="col-auto">
+                                        <span class="text-muted small">el total es de $</span>
+                                    </div>
+                                    <div class="col-4 col-md-3">
+                                        <input type="number" id="editVolumePrice"
+                                            class="form-control form-control-sm form-control-dark fw-bold text-success"
+                                            step="0.50" placeholder="0.00">
+                                    </div>
+                                </div>
+                                <div class="small text-muted mt-2" style="font-size: 0.75rem;">Ej: Al llevar 3, el total
+                                    es $100. (Se aplica automáticamente en el carrito).</div>
+                            </div>
+                        </div>
+
+                        <!-- ===== ETIQUETAS (BADGES) ===== -->
+                        <div class="col-12 border-top py-3 mt-2" style="border-color: #dee2e6 !important;">
+                            <label class="form-label text-muted small text-uppercase fw-bold mb-2">
+                                <i class="bi bi-tag-fill me-1"></i> Etiqueta / Badge
+                            </label>
+                            <div class="d-flex flex-wrap gap-2 mb-2" id="badgeSelector">
+                                <button type="button"
+                                    class="btn btn-sm btn-outline-secondary badge-option badge-selected" data-badge=""
+                                    onclick="selectBadge(this, '')">
+                                    <i class="bi bi-x-lg me-1"></i>Sin Etiqueta
+                                </button>
+                                <button type="button" class="btn btn-sm btn-outline-primary badge-option"
+                                    data-badge="NUEVO" onclick="selectBadge(this, 'NUEVO')">
+                                    <i class="bi bi-stars me-1"></i>NUEVO
+                                </button>
+                                <button type="button" class="btn btn-sm btn-outline-warning badge-option"
+                                    data-badge="OFERTA" onclick="selectBadge(this, 'OFERTA')">
+                                    <i class="bi bi-percent me-1"></i>OFERTA
+                                </button>
+                                <button type="button" class="btn btn-sm btn-outline-danger badge-option"
+                                    data-badge="POPULAR" onclick="selectBadge(this, 'POPULAR')">
+                                    <i class="bi bi-fire me-1"></i>POPULAR
+                                </button>
+                                <button type="button" class="btn btn-sm btn-outline-info badge-option"
+                                    data-badge="COMBO" onclick="selectBadge(this, 'COMBO')">
+                                    <i class="bi bi-gift me-1"></i>COMBO
+                                </button>
+                                <button type="button" class="btn btn-sm btn-outline-dark badge-option"
+                                    data-badge="EDICIÓN LIMITADA" onclick="selectBadge(this, 'EDICIÓN LIMITADA')">
+                                    <i class="bi bi-gem me-1"></i>ED. LIMITADA
+                                </button>
+                            </div>
+                            <div class="input-group input-group-sm" style="max-width: 300px;">
+                                <span class="input-group-text bg-light text-muted"
+                                    style="font-size:0.75rem;">Personalizada:</span>
+                                <input type="text" id="editPromo" class="form-control form-control-dark form-control-sm"
+                                    placeholder="Texto libre..." onkeyup="syncBadgeButtons(this.value)">
+                            </div>
+                        </div>
+
+                        <!-- ===== PROMOCIÓN / PRECIO ANTERIOR ===== -->
+                        <div class="col-12 border-bottom pb-3 mb-2" style="border-color: #dee2e6 !important;">
+                            <div class="row align-items-center">
+                                <div class="col-md-5">
+                                    <div class="form-check form-switch d-flex align-items-center gap-2">
+                                        <input class="form-check-input" type="checkbox" id="editHasOffer"
+                                            onchange="document.getElementById('oldPriceContainer').style.display = this.checked ? 'block' : 'none'">
+                                        <label class="form-check-label mb-0 fw-semibold" for="editHasOffer">
+                                            <i class="bi bi-tag me-1 text-success"></i>¿En Promoción?
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-5" id="oldPriceContainer" style="display: none;">
+                                    <div class="input-group input-group-sm">
+                                        <span class="input-group-text bg-light text-muted">Precio anterior $</span>
+                                        <input type="number" id="editOldPrice" class="form-control form-control-dark"
+                                            step="0.50" placeholder="0.00">
+                                    </div>
+                                    <small class="text-muted" style="font-size:0.65rem;">El precio tachado que aparecerá
+                                        junto al precio actual.</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <label class="form-label text-muted small text-uppercase fw-bold">Descripción Corta</label>
+                            <input type="text" id="editDesc" class="form-control form-control-dark"
+                                placeholder="Ej: Botella de 355ml">
+                        </div>
+
+                        <!-- ===== VISIBILIDAD ===== -->
+                        <div class="col-12 mt-3 mb-2">
+                            <div class="form-check form-switch d-flex align-items-center gap-3 border p-3 rounded-3 bg-light"
+                                style="border-color: #dee2e6 !important;">
+                                <input class="form-check-input fs-4 m-0" type="checkbox" id="editActive" checked>
+                                <div>
+                                    <label class="form-check-label fw-bold mb-0" for="editActive"
+                                        style="color: #092440;">Visible en Tienda</label>
+                                    <div class="small text-muted" style="line-height:1.2;">Si está desactivado, el
+                                        producto no aparecerá en el catálogo para los clientes pero se mantendrá en tu
+                                        inventario.</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- ===== DESTACAR EN INICIO ===== -->
+                        <div class="col-12 mb-2">
+                            <div class="form-check form-switch d-flex align-items-center gap-3 border p-3 rounded-3"
+                                style="border-color: #ffc92c !important; background-color: rgba(255, 201, 44, 0.05);">
+                                <input class="form-check-input fs-4 m-0" type="checkbox" id="editIsFeatured">
+                                <div>
+                                    <label class="form-check-label fw-bold mb-0 text-warning text-darken"
+                                        for="editIsFeatured" style="color: #d39e00 !important;">Destacar en Inicio
+                                        (Promociones)</label>
+                                    <div class="small text-muted" style="line-height:1.2;">Forzar que este producto
+                                        aparezca
+                                        en el carrusel principal de la página de inicio. Máximo 3 productos
+                                        recomendados.</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Package Product Selector (only visible for packages) -->
+                        <div class="col-12" id="packageProductSelector" style="display: none;">
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                <label class="form-label text-muted small text-uppercase fw-bold mb-0">
+                                    <i class="bi bi-boxes me-1"></i> Productos incluidos
+                                </label>
+                            </div>
+                            <input type="text" id="packageProductSearch"
+                                class="form-control form-control-sm mb-2 border-2"
+                                placeholder="Buscar producto por nombre..."
+                                onkeyup="if(typeof filterPackageProducts === 'function') filterPackageProducts()">
+
+                            <div class="border rounded-3 p-3"
+                                style="max-height: 250px; overflow-y: auto; background: #f8f9fb;">
+                                <div id="packageProductList">
+                                    <!-- Populated by JS -->
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center mt-2 p-2 bg-light rounded">
+                                <small class="text-muted">Total individual: <strong
+                                        id="packageIndividualTotal">$0.00</strong></small>
+                                <small class="text-success fw-bold">Ahorro con combo: <span
+                                        id="packageSavings">$0.00</span></small>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <label class="form-label text-muted small text-uppercase fw-bold">
+                                <i class="bi bi-camera me-1"></i> Foto del Producto
+                            </label>
+                            <div class="upload-zone d-flex gap-3 align-items-center">
+                                <div id="imagePreviewContainer"
+                                    style="width: 80px; height: 80px; background: #f0f2f5; border-radius: 12px; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+                                    <img id="imagePreview" src=""
+                                        style="max-width: 100%; max-height: 100%; display: none; object-fit: contain;">
+                                    <i id="imagePlaceholder" class="bi bi-image text-muted fs-3"></i>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <div class="d-flex gap-2 mb-2">
+                                        <input type="file" id="editImageFile" class="form-control form-control-dark"
+                                            accept="image/*" onchange="uploadImage()">
+                                        <button type="button" class="btn btn-outline-secondary"
+                                            onclick="openImageGallery('editImage')" title="Seleccionar de Galería">
+                                            <i class="bi bi-images"></i>
+                                        </button>
+                                    </div>
+                                    <input type="hidden" id="editImage" value="">
+
+                                    <div id="uploadProgress" class="progress mt-2" style="display:none; height: 4px;">
+                                        <div class="progress-bar bg-warning" role="progressbar" style="width: 0%"></div>
+                                    </div>
+                                    <small id="uploadStatus" class="text-success mt-1"></small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Fallback Icons -->
+                        <div class="col-md-6">
+                            <label class="form-label text-muted small text-uppercase fw-bold">Icono Fallback (Si no hay
+                                foto)</label>
+                            <select id="editImageIcon" class="form-select form-control-dark form-select-sm"
+                                onchange="updateIconPreview()">
+                                <option value="bi-cup-straw">🍺 Cerveza</option>
+                                <option value="bi-water">🌊 Agua / Pacífico</option>
+                                <option value="bi-droplet-half">🥃 Licor / Botella</option>
+                                <option value="bi-droplet">💧 Gota / Tequila</option>
+                                <option value="bi-bag">🛍️ Bolsa / Botana</option>
+                                <option value="bi-bag-fill">🛍️ Bolsa Llena</option>
+                                <option value="bi-triangle-fill">🔺 Doritos / Totopos</option>
+                                <option value="bi-triangle">△ Tostitos</option>
+                                <option value="bi-snow3">❄️ Hielo / Frío</option>
+                                <option value="bi-fire">🔥 Fuego / Picante</option>
+                                <option value="bi-gift">🎁 Paquete / Combo</option>
+                                <option value="bi-cup">🥤 Vaso / Refresco</option>
+                                <option value="bi-cup-straw">🥤 Cup Straw</option>
+                            </select>
+                            <div id="iconPreviewBox" class="mt-2 text-center p-2 bg-light rounded"
+                                style="font-size: 2rem;">
+                                <i class="bi bi-cup-straw" style="color: #092440;"></i>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label text-muted small text-uppercase fw-bold">Color del Icono</label>
+                            <select id="editImageColor" class="form-select form-control-dark form-select-sm"
+                                onchange="updateIconPreview()">
+                                <option value="modelorama-azul">🔵 Azul Modelorama</option>
+                                <option value="modelorama-gold">🟡 Dorado Modelorama</option>
+                                <option value="modelorama-rojo">🔴 Rojo Victoria</option>
+                                <option value="modelorama-amber">🟠 Ámbar Cerveza</option>
+                                <option value="modelorama-cyan">🩵 Celeste Pacífico</option>
+                                <option value="modelorama-dark">⚫ Oscuro Premium</option>
+                                <option value="modelorama-verde">🟢 Verde Fresco</option>
+                            </select>
+                            <div class="d-flex gap-2 mt-2 flex-wrap" id="colorSwatches">
+                                <span
+                                    onclick="document.getElementById('editImageColor').value='modelorama-azul'; updateIconPreview()"
+                                    class="rounded-circle"
+                                    style="width:28px; height:28px; background:#092440; cursor:pointer; border: 2px solid #ddd;"
+                                    title="Azul Modelorama"></span>
+                                <span
+                                    onclick="document.getElementById('editImageColor').value='modelorama-gold'; updateIconPreview()"
+                                    class="rounded-circle"
+                                    style="width:28px; height:28px; background:#FFC92C; cursor:pointer; border: 2px solid #ddd;"
+                                    title="Dorado"></span>
+                                <span
+                                    onclick="document.getElementById('editImageColor').value='modelorama-rojo'; updateIconPreview()"
+                                    class="rounded-circle"
+                                    style="width:28px; height:28px; background:#C62828; cursor:pointer; border: 2px solid #ddd;"
+                                    title="Rojo Victoria"></span>
+                                <span
+                                    onclick="document.getElementById('editImageColor').value='modelorama-amber'; updateIconPreview()"
+                                    class="rounded-circle"
+                                    style="width:28px; height:28px; background:#FF8F00; cursor:pointer; border: 2px solid #ddd;"
+                                    title="Ámbar"></span>
+                                <span
+                                    onclick="document.getElementById('editImageColor').value='modelorama-cyan'; updateIconPreview()"
+                                    class="rounded-circle"
+                                    style="width:28px; height:28px; background:#0288D1; cursor:pointer; border: 2px solid #ddd;"
+                                    title="Celeste"></span>
+                                <span
+                                    onclick="document.getElementById('editImageColor').value='modelorama-dark'; updateIconPreview()"
+                                    class="rounded-circle"
+                                    style="width:28px; height:28px; background:#1B2838; cursor:pointer; border: 2px solid #ddd;"
+                                    title="Oscuro"></span>
+                                <span
+                                    onclick="document.getElementById('editImageColor').value='modelorama-verde'; updateIconPreview()"
+                                    class="rounded-circle"
+                                    style="width:28px; height:28px; background:#2E7D32; cursor:pointer; border: 2px solid #ddd;"
+                                    title="Verde"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="editCold" checked>
+                                <label class="form-check-label text-info" for="editCold"><i class="bi bi-snow me-1"></i>
+                                    Entregar Fría</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer border-top border-secondary justify-content-between p-3">
+                    <button type="button" class="btn btn-outline-danger" id="btnDeleteProduct"
+                        onclick="handleDeleteProduct()" style="display: none;">
+                        <i class="bi bi-trash"></i>
+                    </button>
+                    <div class="d-flex gap-2 ms-auto">
+                        <button type="button" class="btn btn-link text-muted text-decoration-none"
+                            data-bs-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-premium-primary" onclick="saveProduct()">Guardar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CATEGORY MODAL -->
+    <div class="modal fade" id="categoryModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg" style="background: #fff;">
+                <div class="modal-header admin-modal-header border-0">
+                    <h5 class="modal-title fw-bold" id="categoryModalTitle">Categoría</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body py-4">
+                    <input type="hidden" id="editCatOldId">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label text-muted small text-uppercase fw-bold">ID (Ruta web)</label>
+                            <input type="text" id="editCatId" class="form-control form-control-dark"
+                                placeholder="Ej: vinos-tintos">
+                            <small class="text-muted" style="font-size: 0.65rem;">Solo minúsculas y guiones.</small>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label text-muted small text-uppercase fw-bold">Nombre Visible</label>
+                            <input type="text" id="editCatName" class="form-control form-control-dark"
+                                placeholder="Ej: Vinos Tintos">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label text-muted small text-uppercase fw-bold">Tipo de Story</label>
+                            <select id="editCatType" class="form-select form-control-dark"
+                                onchange="toggleCategoryType()">
+                                <option value="icon">Icono (Bootstrap)</option>
+                                <option value="image">Imagen (URL/Logo)</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label text-muted small text-uppercase fw-bold">Orden (Posición)</label>
+                            <input type="number" id="editCatOrder" class="form-control form-control-dark" value="10">
+                        </div>
+
+                        <div class="col-12" id="catIconInputGroup">
+                            <label class="form-label text-muted small text-uppercase fw-bold">Icono Visual</label>
+                            <select id="editCatIcon" class="form-select form-control-dark">
+                                <option value="bi-tag text-white">Etiqueta (Gris)</option>
+                                <option value="bi-award text-warning">Corona (Dorado)</option>
+                                <option value="bi-cup-straw text-white">Licores/Copa (Blanco)</option>
+                                <option value="bi-droplet text-info">Agua/Hielo (Azul)</option>
+                                <option value="bi-fire text-danger">Fuego/Picante (Rojo)</option>
+                                <option value="bi-star text-warning">Estrella (Amarillo)</option>
+                                <option value="bi-heart-fill text-danger">Favoritos (Corazón)</option>
+                                <option value="bi-bag-check-fill text-success">Botanas (Verde)</option>
+                                <option value="bi-gift text-danger">Regalo/Paquete</option>
+                                <option value="bi-three-dots text-secondary">Otros</option>
+                            </select>
+                        </div>
+
+                        <div class="col-12" id="catImageInputGroup" style="display: none;">
+                            <label class="form-label text-muted small text-uppercase fw-bold">URL del Logo (.png
+                                transparente)</label>
+                            <div class="d-flex gap-2">
+                                <input type="text" id="editCatImage" class="form-control form-control-dark"
+                                    placeholder="https://...">
+                                <button type="button" class="btn btn-outline-secondary"
+                                    onclick="openImageGallery('editCatImage')" title="Seleccionar de Galería">
+                                    <i class="bi bi-images"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <label class="form-label text-muted small text-uppercase fw-bold">Color del Aro
+                                (Ring)</label>
+                            <select id="editCatRing" class="form-select form-control-dark">
+                                <option value="">Sin aro de color (Gris)</option>
+                                <option value="ring-gold">Dorado (Corona)</option>
+                                <option value="ring-blue">Azul Fuerte (Modelo)</option>
+                                <option value="ring-orange">Naranja (Victoria)</option>
+                                <option value="ring-cyan">Celeste (Pacífico)</option>
+                                <option value="ring-red">Rojo Fuerte</option>
+                                <option value="ring-purple">Morado Oscuro (Licores)</option>
+                                <option value="ring-green">Verde</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer border-top border-secondary justify-content-between p-3">
+                    <button type="button" class="btn btn-outline-danger" id="btnDeleteCategory"
+                        onclick="handleDeleteCategory()" style="display: none;">
+                        <i class="bi bi-trash"></i>
+                    </button>
+                    <div class="d-flex gap-2 ms-auto">
+                        <button type="button" class="btn btn-link text-muted text-decoration-none"
+                            data-bs-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-premium-primary" onclick="saveCategory()">Guardar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- IMAGE GALLERY MODAL -->
+    <div class="modal fade" id="imageGalleryModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+            <div class="modal-content border-0 shadow-lg" style="background: #fff;">
+                <div class="modal-header admin-modal-header border-0">
+                    <h5 class="modal-title fw-bold"><i class="bi bi-images me-2"></i>Galería de Imágenes</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body bg-light">
+                    <div class="row g-3" id="imageGalleryGrid">
+                        <!-- Loaded by JS -->
+                        <div class="col-12 text-center py-5">
+                            <div class="spinner-border text-primary" role="status"></div>
+                            <p class="text-muted mt-2">Cargando galería...</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer border-top border-secondary p-3">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
+
+    <!-- Firebase Compat SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-storage-compat.js"></script>
+
+    <script src="js/firebase-config.js"></script>
+    <script src="js/products.js"></script>
+    <script src="js/admin.js"></script>
+</body>
+
+</html>
