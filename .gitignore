@@ -1,5 +1,6 @@
 # Firebase & Sensitive Config
 firebase-config.json
+firebase-config-clean.json
 .firebase/
 users.json
 
