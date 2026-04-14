@@ -117,6 +117,14 @@
                             <i class="bi bi-geo-alt-fill"></i>
                         </a>
                     </li>
+                    <li class="nav-item ms-lg-2">
+                        <button id="themeToggle" class="btn btn-outline-secondary position-relative me-2"
+                            onclick="window.toggleTheme()"
+                            style="border-radius: 50%; width: 42px; height: 42px; display: flex; align-items: center; justify-content: center; border-color: var(--text-muted); color: var(--text-primary);"
+                            title="Cambiar tema">
+                            <i class="bi bi-moon-fill"></i>
+                        </button>
+                    </li>
                     <li class="nav-item">
                         <a class="btn btn-premium-primary px-4 py-2" href="https://wa.me/5214531464786" target="_blank"
                             style="font-size: 0.8rem;">
@@ -609,6 +617,7 @@
     <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore-compat.js"></script>
 
     <script src="js/firebase-config.js"></script>
+    <script src="js/theme-manager.js"></script>
     <script src="js/products.js"></script>
     <script src="js/script.js"></script>
     <script src="js/map.js"></script>

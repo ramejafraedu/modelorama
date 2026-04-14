@@ -45,7 +45,38 @@
     --transition-slow: 0.7s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* ===== DARK THEME VARIABLES ===== */
+[data-theme="dark"] {
+    --bg-base: #0f172a;
+    --bg-surface: #1e293b;
+    --glass-panel: rgba(30, 41, 59, 0.9);
 
+    --accent-gold: #fbbf24;
+    --accent-gold-glow: rgba(251, 191, 36, 0.4);
+    --accent-amber: #f59e0b;
+    --accent-glow-blue: rgba(59, 130, 246, 0.15);
+
+    --primary-blue: #3b82f6;
+    --secondary-blue: #60a5fa;
+
+    --text-primary: #f1f5f9;
+    --text-secondary: #cbd5e1;
+    --white: #ffffff;
+
+    --alert-red: #f87171;
+    --success-green: #34d399;
+    --whatsapp-green: #25D366;
+    --text-muted: #94a3b8;
+
+    --glass-border: 1px solid rgba(255, 255, 255, 0.08);
+    --glass-border-hover: 1px solid rgba(251, 191, 36, 0.6);
+    --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+}
+
+/* ===== THEME TRANSITIONS ===== */
+* {
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
 
 /* ===== GLOBAL RESETS & TYPOGRAPHY ===== */
 * {
